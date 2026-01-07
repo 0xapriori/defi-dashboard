@@ -84,21 +84,21 @@ const activeUsersData = [
   { name: 'Curve', dau: 22000, mau: 105000, chain: 'Multi-chain', type: 'DEX' },
 ];
 
-// Fee and REV (Real Economic Value) data (30-day in millions)
-// REV = Protocol's share of fees that accrues to token holders/treasury (excludes LPs, validators, etc.)
+// Fee and Protocol Revenue data (30-day in millions)
+// Protocol Revenue = Share of fees accruing to token holders/treasury (excludes LPs, external validators, etc.)
 const feeRevenueData = [
-  { name: 'Jupiter', fees: 101, rev: 24.6, chain: 'Solana', revCalc: 'Platform fees to JUP stakers (referral fees, priority fees)', revPct: 24.4 },
-  { name: 'Aave', fees: 96, rev: 13.2, chain: 'Multi', revCalc: 'Reserve factor from interest spread to DAO treasury', revPct: 13.8 },
-  { name: 'Uniswap', fees: 129, rev: 0, chain: 'Multi', revCalc: 'Fee switch not enabled - 100% to LPs', revPct: 0 },
-  { name: 'Lido', fees: 92, rev: 9.25, chain: 'Ethereum', revCalc: '10% of staking rewards (5% treasury, 5% node operators)', revPct: 10.1 },
-  { name: 'PancakeSwap', fees: 45, rev: 8.5, chain: 'BSC', revCalc: 'Trading fees to CAKE buyback & burn + treasury', revPct: 18.9 },
-  { name: 'Maker/Sky', fees: 37, rev: 19.4, chain: 'Ethereum', revCalc: 'Stability fees + liquidation penalties to Surplus Buffer', revPct: 52.4 },
-  { name: 'Hyperliquid', fees: 35, rev: 28, chain: 'Hyperliquid', revCalc: 'Trading fees to HLP vault + assistance fund', revPct: 80 },
-  { name: 'Ethena', fees: 32, rev: 25.6, chain: 'Ethereum', revCalc: 'Funding rate arbitrage profits to insurance fund + sUSDe yield', revPct: 80 },
-  { name: 'Raydium', fees: 28, rev: 12, chain: 'Solana', revCalc: 'Protocol fee share from AMM swaps to treasury', revPct: 42.9 },
-  { name: 'Aerodrome', fees: 22, rev: 18, chain: 'Base', revCalc: 'veAERO lockers receive 100% of trading fees', revPct: 81.8 },
-  { name: 'GMX', fees: 18, rev: 5.4, chain: 'Arbitrum', revCalc: '30% to GMX stakers, 70% to GLP holders', revPct: 30 },
-  { name: 'Pendle', fees: 8.82, rev: 7, chain: 'Multi', revCalc: 'Yield fee (3%) + swap fees to vePENDLE holders', revPct: 79.4 },
+  { name: 'Jupiter', fees: 101, protocolRev: 24.6, chain: 'Solana', revCalc: 'Platform fees to JUP stakers (referral fees, priority fees)', revPct: 24.4 },
+  { name: 'Aave', fees: 96, protocolRev: 13.2, chain: 'Multi', revCalc: 'Reserve factor from interest spread to DAO treasury', revPct: 13.8 },
+  { name: 'Uniswap', fees: 129, protocolRev: 0, chain: 'Multi', revCalc: 'Fee switch not enabled - 100% to LPs', revPct: 0 },
+  { name: 'Lido', fees: 92, protocolRev: 9.25, chain: 'Ethereum', revCalc: '10% of staking rewards (5% treasury, 5% node operators)', revPct: 10.1 },
+  { name: 'PancakeSwap', fees: 45, protocolRev: 8.5, chain: 'BSC', revCalc: 'Trading fees to CAKE buyback & burn + treasury', revPct: 18.9 },
+  { name: 'Maker/Sky', fees: 37, protocolRev: 19.4, chain: 'Ethereum', revCalc: 'Stability fees + liquidation penalties to Surplus Buffer', revPct: 52.4 },
+  { name: 'Hyperliquid', fees: 35, protocolRev: 28, chain: 'Hyperliquid', revCalc: 'Trading fees to HLP vault + assistance fund', revPct: 80 },
+  { name: 'Ethena', fees: 32, protocolRev: 25.6, chain: 'Ethereum', revCalc: 'Funding rate arbitrage profits to insurance fund + sUSDe yield', revPct: 80 },
+  { name: 'Raydium', fees: 28, protocolRev: 12, chain: 'Solana', revCalc: 'Protocol fee share from AMM swaps to treasury', revPct: 42.9 },
+  { name: 'Aerodrome', fees: 22, protocolRev: 18, chain: 'Base', revCalc: 'veAERO lockers receive 100% of trading fees', revPct: 81.8 },
+  { name: 'GMX', fees: 18, protocolRev: 5.4, chain: 'Arbitrum', revCalc: '30% to GMX stakers, 70% to GLP holders', revPct: 30 },
+  { name: 'Pendle', fees: 8.82, protocolRev: 7, chain: 'Multi', revCalc: 'Yield fee (3%) + swap fees to vePENDLE holders', revPct: 79.4 },
 ];
 
 // Chain comparison data for radar
@@ -165,7 +165,7 @@ export default function DeFiDashboard() {
                 { id: 'overview', label: 'Overview' },
                 { id: 'protocols', label: 'All Protocols' },
                 { id: 'volume', label: 'Volume & Users' },
-                { id: 'fees', label: 'Fees & REV' },
+                { id: 'fees', label: 'Fees & Revenue' },
                 { id: 'chains', label: 'Chain Analysis' },
                 { id: 'privacy', label: 'Privacy Analysis' },
               ].map((tab) => (
@@ -571,14 +571,14 @@ export default function DeFiDashboard() {
 
           {activeTab === 'fees' && (
             <div className="space-y-8">
-              {/* REV Methodology Explainer */}
+              {/* Protocol Revenue Methodology Explainer */}
               <div className="bg-gradient-to-r from-emerald-950/50 to-cyan-950/50 rounded-2xl p-6 border border-emerald-800/30">
                 <div className="flex items-start gap-4">
                   <div className="text-3xl">📊</div>
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-50 mb-2">Understanding REV (Real Economic Value)</h3>
+                    <h3 className="text-lg font-semibold text-slate-50 mb-2">Understanding Protocol Revenue</h3>
                     <p className="text-slate-300 text-sm mb-3">
-                      <strong className="text-emerald-400">REV</strong> measures the portion of protocol fees that accrues as real economic value to token holders, stakers, or the protocol treasury — excluding fees paid to external parties like liquidity providers or validators.
+                      <strong className="text-emerald-400">Protocol Revenue</strong> measures the portion of fees that accrues to token holders, stakers, or the protocol treasury — excluding fees paid to external parties like liquidity providers or validators.
                     </p>
                     <div className="grid grid-cols-3 gap-4 text-xs">
                       <div className="bg-slate-900/50 rounded-lg p-3">
@@ -586,21 +586,21 @@ export default function DeFiDashboard() {
                         <p className="text-slate-400">All fees generated by the protocol (trading fees, interest, liquidations, etc.)</p>
                       </div>
                       <div className="bg-slate-900/50 rounded-lg p-3">
-                        <p className="text-emerald-400 font-semibold mb-1">REV</p>
+                        <p className="text-emerald-400 font-semibold mb-1">Protocol Revenue</p>
                         <p className="text-slate-400">Fees retained by protocol (treasury, token buybacks, staker rewards)</p>
                       </div>
                       <div className="bg-slate-900/50 rounded-lg p-3">
-                        <p className="text-amber-400 font-semibold mb-1">REV Capture Rate</p>
-                        <p className="text-slate-400">REV ÷ Total Fees = % of value captured by protocol</p>
+                        <p className="text-amber-400 font-semibold mb-1">Capture Rate</p>
+                        <p className="text-slate-400">Protocol Revenue ÷ Total Fees = % of value captured</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Fee REV Chart */}
+              {/* Fee & Protocol Revenue Chart */}
               <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-800">
-                <h3 className="text-xl font-semibold text-slate-50 mb-6">30-Day Fees vs REV ($M)</h3>
+                <h3 className="text-xl font-semibold text-slate-50 mb-6">30-Day Fees vs Protocol Revenue ($M)</h3>
                 <ResponsiveContainer width="100%" height={400}>
                   <BarChart data={feeRevenueData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
@@ -614,7 +614,7 @@ export default function DeFiDashboard() {
                             <div className="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 shadow-xl max-w-xs">
                               <p className="font-semibold text-slate-100 mb-2">{label}</p>
                               <p className="text-cyan-400">Fees: ${data.fees}M</p>
-                              <p className="text-emerald-400">REV: ${data.rev}M</p>
+                              <p className="text-emerald-400">Protocol Revenue: ${data.protocolRev}M</p>
                               <p className="text-amber-400 text-sm">Capture Rate: {data.revPct}%</p>
                               <p className="text-xs text-slate-400 mt-2 border-t border-slate-700 pt-2">{data.revCalc}</p>
                               <p className="text-xs text-slate-500 mt-1">{data.chain}</p>
@@ -626,7 +626,7 @@ export default function DeFiDashboard() {
                     />
                     <Legend wrapperStyle={{ color: '#cbd5e1' }} />
                     <Bar dataKey="fees" fill="#22d3ee" radius={[4, 4, 0, 0]} name="Total Fees" />
-                    <Bar dataKey="rev" fill="#10b981" radius={[4, 4, 0, 0]} name="REV (Real Economic Value)" />
+                    <Bar dataKey="protocolRev" fill="#10b981" radius={[4, 4, 0, 0]} name="Protocol Revenue" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -649,24 +649,24 @@ export default function DeFiDashboard() {
                 </div>
 
                 <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-800">
-                  <h4 className="text-lg font-semibold text-slate-100 mb-4">💰 Top REV Earners</h4>
+                  <h4 className="text-lg font-semibold text-slate-100 mb-4">💰 Top Protocol Revenue</h4>
                   <div className="space-y-3">
-                    {[...feeRevenueData].sort((a, b) => b.rev - a.rev).slice(0, 5).map((p, i) => (
+                    {[...feeRevenueData].sort((a, b) => b.protocolRev - a.protocolRev).slice(0, 5).map((p, i) => (
                       <div key={p.name} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <span className="text-slate-500 text-sm w-4">{i + 1}.</span>
                           <span className="text-slate-200 font-medium">{p.name}</span>
                         </div>
-                        <span className="text-emerald-400 font-semibold">${p.rev}M</span>
+                        <span className="text-emerald-400 font-semibold">${p.protocolRev}M</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-800">
-                  <h4 className="text-lg font-semibold text-slate-100 mb-4">📊 Best REV Capture Rate</h4>
+                  <h4 className="text-lg font-semibold text-slate-100 mb-4">📊 Best Capture Rate</h4>
                   <div className="space-y-3">
-                    {[...feeRevenueData].filter(p => p.rev > 0).sort((a, b) => b.revPct - a.revPct).slice(0, 5).map((p, i) => (
+                    {[...feeRevenueData].filter(p => p.protocolRev > 0).sort((a, b) => b.revPct - a.revPct).slice(0, 5).map((p, i) => (
                       <div key={p.name} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <span className="text-slate-500 text-sm w-4">{i + 1}.</span>
@@ -681,7 +681,7 @@ export default function DeFiDashboard() {
 
               {/* Fee Table */}
               <div className="bg-slate-900/80 rounded-2xl p-6 border border-slate-800">
-                <h3 className="text-xl font-semibold text-slate-50 mb-6">Complete Fee & REV Data</h3>
+                <h3 className="text-xl font-semibold text-slate-50 mb-6">Complete Fee & Protocol Revenue Data</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
@@ -689,9 +689,9 @@ export default function DeFiDashboard() {
                         <th className="pb-4 font-medium">Protocol</th>
                         <th className="pb-4 font-medium">Chain</th>
                         <th className="pb-4 font-medium text-right">30d Fees</th>
-                        <th className="pb-4 font-medium text-right">30d REV</th>
+                        <th className="pb-4 font-medium text-right">30d Protocol Revenue</th>
                         <th className="pb-4 font-medium text-right">Capture Rate</th>
-                        <th className="pb-4 font-medium">REV Calculation Method</th>
+                        <th className="pb-4 font-medium">Revenue Calculation Method</th>
                       </tr>
                     </thead>
                     <tbody className="text-sm">
@@ -700,7 +700,7 @@ export default function DeFiDashboard() {
                           <td className="py-3 font-semibold text-slate-100">{row.name}</td>
                           <td className="py-3 text-slate-400">{row.chain}</td>
                           <td className="py-3 text-right text-cyan-400 font-medium">${row.fees}M</td>
-                          <td className="py-3 text-right text-emerald-400">${row.rev}M</td>
+                          <td className="py-3 text-right text-emerald-400">${row.protocolRev}M</td>
                           <td className="py-3 text-right text-amber-400">{row.revPct}%</td>
                           <td className="py-3 text-slate-400 text-xs max-w-xs">{row.revCalc}</td>
                         </tr>
